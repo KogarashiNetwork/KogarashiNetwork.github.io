@@ -12,7 +12,7 @@ nav:
   - Tutorial:
     - 'Abstract': tutorial/index.md
     - Plonk Pallet: tutorial/plonk_pallet.md
-    - Ivc Pallet: tutorial/ivc_pallet.md
+    - Nova Pallet: tutorial/nova_pallet.md
     - Confidential Transfer Pallet: tutorial/confidential_transfer_pallet.md
     - RedDSA Wallet: tutorial/reddsa_wallet.md
   - Constraints:

@@ -1,31 +1,31 @@
-# Ivc Tutorial
+# Nova Tutorial
 
-In this tutorial, we are going to import nova-ivc-pallet to substrate runtime and test its functionalities.
+In this tutorial, we are going to import pallet-nova to substrate runtime and test its functionalities.
 
 The steps are following.
 
-1. Define the nova-ivc-pallet in depencencies
-2. Couple the nova-ivc-pallet to your own pallet
-3. Use the nova-ivc-pallet methods in your pallet
+1. Define the pallet-nova in depencencies
+2. Couple the pallet-nova to your own pallet
+3. Use the pallet-nova methods in your pallet
 4. Import the coupling pallet to TestRuntime
 5. Test whether the functions work correctly
 
 
-## 1. Define the nova-ivc-pallet in depencencies
-First of all, you need to define the `nova-ivc-pallet` when you start to implement your pallet. Please define as following.
+## 1. Define the pallet-nova in depencencies
+First of all, you need to define the `pallet-nova` when you start to implement your pallet. Please define as following.
 
 - <your-pallet>/Cargo.toml
 ```toml
 [dependencies]
-nova-ivc-pallet = { git = "https://github.com/KogarashiNetwork/Kogarashi", branch = "master", default-features = false }
+pallet-nova = { git = "https://github.com/KogarashiNetwork/Kogarashi", branch = "master", default-features = false }
 rand_core = {version="0.6", default-features = false }
 ```
 
 The `plonk-pallet` depends on `rand_core` so please import it.
 
-## 2. Couple the nova-ivc-pallet to your own pallet
+## 2. Couple the pallet-nova to your own pallet
 
-The next, the `nova-ivc-pallet` need to be coupled with your pallet. Please couple the pallet `Config` as following.
+The next, the `pallet-nova` need to be coupled with your pallet. Please couple the pallet `Config` as following.
 
 - <your-pallet>/src/main.rs
 ```rs
@@ -33,16 +33,16 @@ The next, the `nova-ivc-pallet` need to be coupled with your pallet. Please coup
 pub mod pallet {
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
-    use nova_ivc_pallet::{PublicParams, RecursiveProof};
+    use pallet_nova::{PublicParams, RecursiveProof};
 
-    /// Coupling configuration trait with nova_ivc_pallet.
+    /// Coupling configuration trait with pallet_nova.
     #[pallet::config]
-    pub trait Config: frame_system::Config + nova_ivc_pallet::Config {}
+    pub trait Config: frame_system::Config + pallet_nova::Config {}
 ```
-With this step, you can use the `nova-ivc-pallet` in your pallet through `Module`.
+With this step, you can use the `pallet-nova` in your pallet through `Module`.
 
-## 3. Use the nova-ivc-pallet methods on your pallet
-Next, let's use the `nova-ivc-pallet` method in your pallet. We are going to use the `verify` method which verifies the proof. In this tutorial, we use [sum-storage](https://github.com/JoshOrndorff/recipes/blob/master/pallets/sum-storage/src/main.rs) pallet as example and call the `verify` method before set `Thing1` storage value on `set_thing_1`. If the `verify` is successful, the `set_thing_1` can set `Thing1` value.
+## 3. Use the pallet-nova methods on your pallet
+Next, let's use the `pallet-nova` method in your pallet. We are going to use the `verify` method which verifies the proof. In this tutorial, we use [sum-storage](https://github.com/JoshOrndorff/recipes/blob/master/pallets/sum-storage/src/main.rs) pallet as example and call the `verify` method before set `Thing1` storage value on `set_thing_1`. If the `verify` is successful, the `set_thing_1` can set `Thing1` value.
 
 - <your-pallet>/src/main.rs
 ```rust
@@ -58,7 +58,7 @@ Next, let's use the `nova-ivc-pallet` method in your pallet. We are going to use
             public_inputs: Vec<Fr>,
         ) -> DispatchResultWithPostInfo {
             // Use the proof verification
-            nova_ivc_pallet::Pallet::<T>::verify(origin, proof, pp)?;
+            pallet_nova::Pallet::<T>::verify(origin, proof, pp)?;
 
             Thing1::<T>::put(val);
 
@@ -69,9 +69,9 @@ Next, let's use the `nova-ivc-pallet` method in your pallet. We are going to use
 With this step, we can check whether the proof is valid before setting the `Thing1` value and only if the proof is valid, the value is set.
 
 ## 4. Import the coupling pallet to TestRuntime and define the function for IVC verification.
-We already can use the `nova-ivc-pallet` methods so we are going to import it to `TestRumtime` and define your customized IVC compatible function.
+We already can use the `pallet-nova` methods so we are going to import it to `TestRumtime` and define your customized IVC compatible function.
 
-In order to use `nova-ivc-pallet` in `TestRuntime`, we need to import `nova-ivc-pallet` crate and define the pallet config to `construct_runtime` as following.
+In order to use `pallet-nova` in `TestRuntime`, we need to import `pallet-nova` crate and define the pallet config to `construct_runtime` as following.
 
 - runtime/src/main.rs
 ```rust
@@ -80,8 +80,8 @@ use crate::{self as sum_storage, Config};
 use frame_support::dispatch::{DispatchError, DispatchErrorWithPostInfo, PostDispatchInfo};
 use frame_support::{assert_ok, construct_runtime, parameter_types};
 
-// Import `nova_ivc_pallet` and dependencies
-pub use nova_ivc_pallet::*;
+// Import `pallet_nova` and dependencies
+pub use pallet_nova::*;
 use rand_core::SeedableRng;
 
 --- snip ---
@@ -93,8 +93,8 @@ construct_runtime!(
         UncheckedExtrinsic = UncheckedExtrinsic,
     {
         System: frame_system::{Module, Call, Config, Storage, Event<T>},
-        // Define the `nova-ivc-pallet` in `contruct_runtime`
-        IvcPallet: nova_ivc::{Module, Call, Storage},
+        // Define the `pallet-nova` in `contruct_runtime`
+        Nova: pallet_nova::{Module, Call, Storage},
         {YourPallet}: {your_pallet}::{Module, Call, Storage},
     }
 );
@@ -140,7 +140,7 @@ impl nova_ivc::Config for TestRuntime {
 With this step, we finish to setup the ivc runtime environment.
 
 ## 5. Test whether the functions work correctly
-The nova-ivc-pallet methods is available on your pallet so we are going to test them as following tests.
+The pallet-nova methods is available on your pallet so we are going to test them as following tests.
 
 - <your-pallet>/src/main.rs
 ```rust
@@ -162,14 +162,13 @@ fn main() {
             z0_primary,
             z0_secondary,
         );
+    (0..2).for_each(|_| {ivc.prove_step(&pp);});
+    let proof = ivc.prove_step(&pp);
 
     new_test_ext().execute_with(|| {
-        for _ in 0..3 {
-            let proof = ivc.prove_step(&pp);
-            assert!(IvcPallet::verify(Origin::signed(1), proof, pp.clone()).is_ok());
-        }
+        assert!(Nova::verify(Origin::signed(1), proof, pp.clone()).is_ok());
     });
 }
 
 ```
-With above tests, we can confirm that your pallet is coupling with `nova-ivc-pallet` and these methods work correctly. You can check the `nova-ivc-pallet` example [here](https://github.com/KogarashiNetwork/Kogarashi/blob/master/nova_pallet/src/tests.rs). Happy hacking!
+With above tests, we can confirm that your pallet is coupling with `pallet-nova` and these methods work correctly. You can check the `pallet-nova` example [here](https://github.com/KogarashiNetwork/Kogarashi/blob/master/pallet/nova/src/tests.rs). Happy hacking!

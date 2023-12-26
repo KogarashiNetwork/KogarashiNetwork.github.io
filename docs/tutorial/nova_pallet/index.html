@@ -19,7 +19,7 @@
     
     
       
-        <title>Ivc Pallet - Kogarashi Network</title>
+        <title>Nova Pallet - Kogarashi Network</title>
       
     
     
@@ -67,7 +67,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ivc-tutorial" class="md-skip">
+        <a href="#nova-tutorial" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Ivc Pallet
+              Nova Pallet
             
           </span>
         </div>
@@ -373,12 +373,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Ivc Pallet
+          Nova Pallet
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Ivc Pallet
+        Nova Pallet
       </a>
       
         
@@ -397,22 +397,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-define-the-nova-ivc-pallet-in-depencencies" class="md-nav__link">
-    1. Define the nova-ivc-pallet in depencencies
+  <a href="#1-define-the-pallet-nova-in-depencencies" class="md-nav__link">
+    1. Define the pallet-nova in depencencies
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-couple-the-nova-ivc-pallet-to-your-own-pallet" class="md-nav__link">
-    2. Couple the nova-ivc-pallet to your own pallet
+  <a href="#2-couple-the-pallet-nova-to-your-own-pallet" class="md-nav__link">
+    2. Couple the pallet-nova to your own pallet
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-use-the-nova-ivc-pallet-methods-on-your-pallet" class="md-nav__link">
-    3. Use the nova-ivc-pallet methods on your pallet
+  <a href="#3-use-the-pallet-nova-methods-on-your-pallet" class="md-nav__link">
+    3. Use the pallet-nova methods on your pallet
   </a>
   
 </li>
@@ -794,22 +794,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-define-the-nova-ivc-pallet-in-depencencies" class="md-nav__link">
-    1. Define the nova-ivc-pallet in depencencies
+  <a href="#1-define-the-pallet-nova-in-depencencies" class="md-nav__link">
+    1. Define the pallet-nova in depencencies
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-couple-the-nova-ivc-pallet-to-your-own-pallet" class="md-nav__link">
-    2. Couple the nova-ivc-pallet to your own pallet
+  <a href="#2-couple-the-pallet-nova-to-your-own-pallet" class="md-nav__link">
+    2. Couple the pallet-nova to your own pallet
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-use-the-nova-ivc-pallet-methods-on-your-pallet" class="md-nav__link">
-    3. Use the nova-ivc-pallet methods on your pallet
+  <a href="#3-use-the-pallet-nova-methods-on-your-pallet" class="md-nav__link">
+    3. Use the pallet-nova methods on your pallet
   </a>
   
 </li>
@@ -843,29 +843,29 @@
                   
 
 
-<h1 id="ivc-tutorial">Ivc Tutorial</h1>
-<p>In this tutorial, we are going to import nova-ivc-pallet to substrate runtime and test its functionalities.</p>
+<h1 id="nova-tutorial">Nova Tutorial</h1>
+<p>In this tutorial, we are going to import pallet-nova to substrate runtime and test its functionalities.</p>
 <p>The steps are following.</p>
 <ol>
-<li>Define the nova-ivc-pallet in depencencies</li>
-<li>Couple the nova-ivc-pallet to your own pallet</li>
-<li>Use the nova-ivc-pallet methods in your pallet</li>
+<li>Define the pallet-nova in depencencies</li>
+<li>Couple the pallet-nova to your own pallet</li>
+<li>Use the pallet-nova methods in your pallet</li>
 <li>Import the coupling pallet to TestRuntime</li>
 <li>Test whether the functions work correctly</li>
 </ol>
-<h2 id="1-define-the-nova-ivc-pallet-in-depencencies">1. Define the nova-ivc-pallet in depencencies</h2>
-<p>First of all, you need to define the <code>nova-ivc-pallet</code> when you start to implement your pallet. Please define as following.</p>
+<h2 id="1-define-the-pallet-nova-in-depencencies">1. Define the pallet-nova in depencencies</h2>
+<p>First of all, you need to define the <code>pallet-nova</code> when you start to implement your pallet. Please define as following.</p>
 <ul>
 <li><your-pallet>/Cargo.toml</li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span>
-<span class="n">nova-ivc-pallet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://github.com/KogarashiNetwork/Kogarashi&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;master&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">default-features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="p">}</span>
+<span class="n">pallet-nova</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://github.com/KogarashiNetwork/Kogarashi&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;master&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">default-features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="p">}</span>
 <span class="n">rand_core</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="o">=</span><span class="s">&quot;0.6&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">default-features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 
 <p>The <code>plonk-pallet</code> depends on <code>rand_core</code> so please import it.</p>
-<h2 id="2-couple-the-nova-ivc-pallet-to-your-own-pallet">2. Couple the nova-ivc-pallet to your own pallet</h2>
-<p>The next, the <code>nova-ivc-pallet</code> need to be coupled with your pallet. Please couple the pallet <code>Config</code> as following.</p>
+<h2 id="2-couple-the-pallet-nova-to-your-own-pallet">2. Couple the pallet-nova to your own pallet</h2>
+<p>The next, the <code>pallet-nova</code> need to be coupled with your pallet. Please couple the pallet <code>Config</code> as following.</p>
 <ul>
 <li><your-pallet>/src/main.rs</li>
 </ul>
@@ -873,16 +873,16 @@
 <span class="k">pub</span><span class="w"> </span><span class="k">mod</span> <span class="nn">pallet</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">use</span><span class="w"> </span><span class="n">frame_support</span>::<span class="n">pallet_prelude</span>::<span class="o">*</span><span class="p">;</span>
 <span class="w">    </span><span class="k">use</span><span class="w"> </span><span class="n">frame_system</span>::<span class="n">pallet_prelude</span>::<span class="o">*</span><span class="p">;</span>
-<span class="w">    </span><span class="k">use</span><span class="w"> </span><span class="n">nova_ivc_pallet</span>::<span class="p">{</span><span class="n">PublicParams</span><span class="p">,</span><span class="w"> </span><span class="n">RecursiveProof</span><span class="p">};</span>
+<span class="w">    </span><span class="k">use</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="p">{</span><span class="n">PublicParams</span><span class="p">,</span><span class="w"> </span><span class="n">RecursiveProof</span><span class="p">};</span>
 
-<span class="w">    </span><span class="sd">/// Coupling configuration trait with nova_ivc_pallet.</span>
+<span class="w">    </span><span class="sd">/// Coupling configuration trait with pallet_nova.</span>
 <span class="w">    </span><span class="cp">#[pallet::config]</span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Config</span>: <span class="nc">frame_system</span>::<span class="n">Config</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">nova_ivc_pallet</span>::<span class="n">Config</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Config</span>: <span class="nc">frame_system</span>::<span class="n">Config</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="n">Config</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div>
 
-<p>With this step, you can use the <code>nova-ivc-pallet</code> in your pallet through <code>Module</code>.</p>
-<h2 id="3-use-the-nova-ivc-pallet-methods-on-your-pallet">3. Use the nova-ivc-pallet methods on your pallet</h2>
-<p>Next, let's use the <code>nova-ivc-pallet</code> method in your pallet. We are going to use the <code>verify</code> method which verifies the proof. In this tutorial, we use <a href="https://github.com/JoshOrndorff/recipes/blob/master/pallets/sum-storage/src/main.rs">sum-storage</a> pallet as example and call the <code>verify</code> method before set <code>Thing1</code> storage value on <code>set_thing_1</code>. If the <code>verify</code> is successful, the <code>set_thing_1</code> can set <code>Thing1</code> value.</p>
+<p>With this step, you can use the <code>pallet-nova</code> in your pallet through <code>Module</code>.</p>
+<h2 id="3-use-the-pallet-nova-methods-on-your-pallet">3. Use the pallet-nova methods on your pallet</h2>
+<p>Next, let's use the <code>pallet-nova</code> method in your pallet. We are going to use the <code>verify</code> method which verifies the proof. In this tutorial, we use <a href="https://github.com/JoshOrndorff/recipes/blob/master/pallets/sum-storage/src/main.rs">sum-storage</a> pallet as example and call the <code>verify</code> method before set <code>Thing1</code> storage value on <code>set_thing_1</code>. If the <code>verify</code> is successful, the <code>set_thing_1</code> can set <code>Thing1</code> value.</p>
 <ul>
 <li><your-pallet>/src/main.rs</li>
 </ul>
@@ -898,7 +898,7 @@
 <span class="w">            </span><span class="n">public_inputs</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Fr</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="w">        </span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">DispatchResultWithPostInfo</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="c1">// Use the proof verification</span>
-<span class="w">            </span><span class="n">nova_ivc_pallet</span>::<span class="n">Pallet</span>::<span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>::<span class="n">verify</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">proof</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+<span class="w">            </span><span class="n">pallet_nova</span>::<span class="n">Pallet</span>::<span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>::<span class="n">verify</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">proof</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
 
 <span class="w">            </span><span class="n">Thing1</span>::<span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>::<span class="n">put</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
 
@@ -909,8 +909,8 @@
 
 <p>With this step, we can check whether the proof is valid before setting the <code>Thing1</code> value and only if the proof is valid, the value is set.</p>
 <h2 id="4-import-the-coupling-pallet-to-testruntime-and-define-the-function-for-ivc-verification">4. Import the coupling pallet to TestRuntime and define the function for IVC verification.</h2>
-<p>We already can use the <code>nova-ivc-pallet</code> methods so we are going to import it to <code>TestRumtime</code> and define your customized IVC compatible function.</p>
-<p>In order to use <code>nova-ivc-pallet</code> in <code>TestRuntime</code>, we need to import <code>nova-ivc-pallet</code> crate and define the pallet config to <code>construct_runtime</code> as following.</p>
+<p>We already can use the <code>pallet-nova</code> methods so we are going to import it to <code>TestRumtime</code> and define your customized IVC compatible function.</p>
+<p>In order to use <code>pallet-nova</code> in <code>TestRuntime</code>, we need to import <code>pallet-nova</code> crate and define the pallet config to <code>construct_runtime</code> as following.</p>
 <ul>
 <li>runtime/src/main.rs</li>
 </ul>
@@ -919,8 +919,8 @@
 <span class="k">use</span><span class="w"> </span><span class="n">frame_support</span>::<span class="n">dispatch</span>::<span class="p">{</span><span class="n">DispatchError</span><span class="p">,</span><span class="w"> </span><span class="n">DispatchErrorWithPostInfo</span><span class="p">,</span><span class="w"> </span><span class="n">PostDispatchInfo</span><span class="p">};</span>
 <span class="k">use</span><span class="w"> </span><span class="n">frame_support</span>::<span class="p">{</span><span class="n">assert_ok</span><span class="p">,</span><span class="w"> </span><span class="n">construct_runtime</span><span class="p">,</span><span class="w"> </span><span class="n">parameter_types</span><span class="p">};</span>
 
-<span class="c1">// Import `nova_ivc_pallet` and dependencies</span>
-<span class="k">pub</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">nova_ivc_pallet</span>::<span class="o">*</span><span class="p">;</span>
+<span class="c1">// Import `pallet_nova` and dependencies</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="o">*</span><span class="p">;</span>
 <span class="k">use</span><span class="w"> </span><span class="n">rand_core</span>::<span class="n">SeedableRng</span><span class="p">;</span>
 
 <span class="o">---</span><span class="w"> </span><span class="n">snip</span><span class="w"> </span><span class="o">---</span>
@@ -932,8 +932,8 @@
 <span class="w">        </span><span class="n">UncheckedExtrinsic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UncheckedExtrinsic</span><span class="p">,</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="n">System</span>: <span class="nc">frame_system</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">},</span>
-<span class="w">        </span><span class="c1">// Define the `nova-ivc-pallet` in `contruct_runtime`</span>
-<span class="w">        </span><span class="n">IvcPallet</span>: <span class="nc">nova_ivc</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">},</span>
+<span class="w">        </span><span class="c1">// Define the `pallet-nova` in `contruct_runtime`</span>
+<span class="w">        </span><span class="n">Nova</span>: <span class="nc">pallet_nova</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">},</span>
 <span class="w">        </span><span class="p">{</span><span class="n">YourPallet</span><span class="p">}</span>: <span class="p">{</span><span class="n">your_pallet</span><span class="p">}</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">},</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">);</span>
@@ -979,7 +979,7 @@ Function should be implemented for a native computation and for on circuit compu
 
 <p>With this step, we finish to setup the ivc runtime environment.</p>
 <h2 id="5-test-whether-the-functions-work-correctly">5. Test whether the functions work correctly</h2>
-<p>The nova-ivc-pallet methods is available on your pallet so we are going to test them as following tests.</p>
+<p>The pallet-nova methods is available on your pallet so we are going to test them as following tests.</p>
 <ul>
 <li><your-pallet>/src/main.rs</li>
 </ul>
@@ -1001,17 +1001,16 @@ Function should be implemented for a native computation and for on circuit compu
 <span class="w">            </span><span class="n">z0_primary</span><span class="p">,</span>
 <span class="w">            </span><span class="n">z0_secondary</span><span class="p">,</span>
 <span class="w">        </span><span class="p">);</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">2</span><span class="p">).</span><span class="n">for_each</span><span class="p">(</span><span class="o">|</span><span class="n">_</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="n">ivc</span><span class="p">.</span><span class="n">prove_step</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pp</span><span class="p">);});</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">proof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ivc</span><span class="p">.</span><span class="n">prove_step</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pp</span><span class="p">);</span>
 
 <span class="w">    </span><span class="n">new_test_ext</span><span class="p">().</span><span class="n">execute_with</span><span class="p">(</span><span class="o">||</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">3</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">proof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ivc</span><span class="p">.</span><span class="n">prove_step</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pp</span><span class="p">);</span>
-<span class="w">            </span><span class="fm">assert!</span><span class="p">(</span><span class="n">IvcPallet</span>::<span class="n">verify</span><span class="p">(</span><span class="n">Origin</span>::<span class="n">signed</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">proof</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">.</span><span class="n">clone</span><span class="p">()).</span><span class="n">is_ok</span><span class="p">());</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="fm">assert!</span><span class="p">(</span><span class="n">Nova</span>::<span class="n">verify</span><span class="p">(</span><span class="n">Origin</span>::<span class="n">signed</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">proof</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">.</span><span class="n">clone</span><span class="p">()).</span><span class="n">is_ok</span><span class="p">());</span>
 <span class="w">    </span><span class="p">});</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<p>With above tests, we can confirm that your pallet is coupling with <code>nova-ivc-pallet</code> and these methods work correctly. You can check the <code>nova-ivc-pallet</code> example <a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/nova_pallet/src/tests.rs">here</a>. Happy hacking!</p>
+<p>With above tests, we can confirm that your pallet is coupling with <code>pallet-nova</code> and these methods work correctly. You can check the <code>pallet-nova</code> example <a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/pallet/nova/src/tests.rs">here</a>. Happy hacking!</p>
 
 
 
