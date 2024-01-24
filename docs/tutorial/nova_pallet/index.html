@@ -844,7 +844,7 @@
 
 
 <h1 id="nova-tutorial">Nova Tutorial</h1>
-<p>In this tutorial, we are going to import pallet-nova to substrate runtime and test its functionalities.</p>
+<p>In this tutorial, we are going to use <a href="https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova"><code>pallet-nova</code></a> functionality by coupling with your pallet. We use <a href="https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage">sum-storage</a> pallet as example and call <a href="https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova">pallet-nova</a> zero knowledge <code>verify</code> method before set storage value. If the <code>verify</code> is successful, the value can set as storage value.</p>
 <p>The steps are following.</p>
 <ol>
 <li>Define the pallet-nova in depencencies</li>
@@ -863,11 +863,11 @@
 <span class="n">rand_core</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="o">=</span><span class="s">&quot;0.6&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">default-features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 
-<p>The <code>plonk-pallet</code> depends on <code>rand_core</code> so please import it.</p>
+<p>The <code>plonk-nova</code> depends on <code>rand_core</code> so please import it.</p>
 <h2 id="2-couple-the-pallet-nova-to-your-own-pallet">2. Couple the pallet-nova to your own pallet</h2>
 <p>The next, the <code>pallet-nova</code> need to be coupled with your pallet. Please couple the pallet <code>Config</code> as following.</p>
 <ul>
-<li><your-pallet>/src/main.rs</li>
+<li><your-pallet>/src/lib.rs</li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="cp">#[frame_support::pallet]</span>
 <span class="k">pub</span><span class="w"> </span><span class="k">mod</span> <span class="nn">pallet</span><span class="w"> </span><span class="p">{</span>
@@ -877,14 +877,17 @@
 
 <span class="w">    </span><span class="sd">/// Coupling configuration trait with pallet_nova.</span>
 <span class="w">    </span><span class="cp">#[pallet::config]</span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Config</span>: <span class="nc">frame_system</span>::<span class="n">Config</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="n">Config</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Config</span>: <span class="nc">frame_system</span>::<span class="n">Config</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="n">Config</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="sd">/// The overarching event type.</span>
+<span class="w">        </span><span class="k">type</span> <span class="nc">Event</span>: <span class="nb">From</span><span class="o">&lt;</span><span class="n">Event</span><span class="o">&lt;</span><span class="bp">Self</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">IsType</span><span class="o">&lt;&lt;</span><span class="bp">Self</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">frame_system</span>::<span class="n">Config</span><span class="o">&gt;</span>::<span class="n">Event</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 </code></pre></div>
 
 <p>With this step, you can use the <code>pallet-nova</code> in your pallet through <code>Module</code>.</p>
 <h2 id="3-use-the-pallet-nova-methods-on-your-pallet">3. Use the pallet-nova methods on your pallet</h2>
-<p>Next, let's use the <code>pallet-nova</code> method in your pallet. We are going to use the <code>verify</code> method which verifies the proof. In this tutorial, we use <a href="https://github.com/JoshOrndorff/recipes/blob/master/pallets/sum-storage/src/main.rs">sum-storage</a> pallet as example and call the <code>verify</code> method before set <code>Thing1</code> storage value on <code>set_thing_1</code>. If the <code>verify</code> is successful, the <code>set_thing_1</code> can set <code>Thing1</code> value.</p>
+<p>Next, let's use the <code>pallet-nova</code> method in your pallet. We are going to use the <code>verify</code> method which verifies the proof. We use <a href="https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage">sum-storage</a> pallet as example and call the <code>verify</code> method before set <code>Thing1</code> storage value on <code>set_thing_1</code>. If the <code>verify</code> is successful, the <code>set_thing_1</code> can set <code>Thing1</code> value.</p>
 <ul>
-<li><your-pallet>/src/main.rs</li>
+<li><your-pallet>/src/lib.rs</li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="c1">// The module&#39;s dispatchable functions.</span>
 <span class="w">    </span><span class="cp">#[pallet::call]</span>
@@ -894,10 +897,10 @@
 <span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">set_thing_1</span><span class="p">(</span>
 <span class="w">            </span><span class="n">origin</span>: <span class="nc">OriginFor</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="w">            </span><span class="n">val</span>: <span class="kt">u32</span><span class="p">,</span>
-<span class="w">            </span><span class="n">proof</span>: <span class="nc">Proof</span><span class="p">,</span>
-<span class="w">            </span><span class="n">public_inputs</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Fr</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">proof</span>: <span class="nc">RecursiveProof</span><span class="o">&lt;</span><span class="n">T</span>::<span class="n">E1</span><span class="p">,</span><span class="w"> </span><span class="n">T</span>::<span class="n">E2</span><span class="p">,</span><span class="w"> </span><span class="n">T</span>::<span class="n">FC1</span><span class="p">,</span><span class="w"> </span><span class="n">T</span>::<span class="n">FC2</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">pp</span>: <span class="nc">PublicParams</span><span class="o">&lt;</span><span class="n">T</span>::<span class="n">E1</span><span class="p">,</span><span class="w"> </span><span class="n">T</span>::<span class="n">E2</span><span class="p">,</span><span class="w"> </span><span class="n">T</span>::<span class="n">FC1</span><span class="p">,</span><span class="w"> </span><span class="n">T</span>::<span class="n">FC2</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="w">        </span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">DispatchResultWithPostInfo</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="c1">// Use the proof verification</span>
+<span class="w">            </span><span class="c1">// Define the proof verification</span>
 <span class="w">            </span><span class="n">pallet_nova</span>::<span class="n">Pallet</span>::<span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>::<span class="n">verify</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">proof</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
 
 <span class="w">            </span><span class="n">Thing1</span>::<span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>::<span class="n">put</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
@@ -910,9 +913,10 @@
 <p>With this step, we can check whether the proof is valid before setting the <code>Thing1</code> value and only if the proof is valid, the value is set.</p>
 <h2 id="4-import-the-coupling-pallet-to-testruntime-and-define-the-function-for-ivc-verification">4. Import the coupling pallet to TestRuntime and define the function for IVC verification.</h2>
 <p>We already can use the <code>pallet-nova</code> methods so we are going to import it to <code>TestRumtime</code> and define your customized IVC compatible function.</p>
+<p>The notation is aligned with <a href="https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/">Substrate tutorial</a>.</p>
 <p>In order to use <code>pallet-nova</code> in <code>TestRuntime</code>, we need to import <code>pallet-nova</code> crate and define the pallet config to <code>construct_runtime</code> as following.</p>
 <ul>
-<li>runtime/src/main.rs</li>
+<li>runtime/src/lib.rs</li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="k">crate</span>::<span class="p">{</span><span class="bp">self</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">sum_storage</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">};</span>
 
@@ -934,7 +938,7 @@
 <span class="w">        </span><span class="n">System</span>: <span class="nc">frame_system</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">},</span>
 <span class="w">        </span><span class="c1">// Define the `pallet-nova` in `contruct_runtime`</span>
 <span class="w">        </span><span class="n">Nova</span>: <span class="nc">pallet_nova</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">},</span>
-<span class="w">        </span><span class="p">{</span><span class="n">YourPallet</span><span class="p">}</span>: <span class="p">{</span><span class="n">your_pallet</span><span class="p">}</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="n">YourPallet</span><span class="p">}</span>: <span class="p">{</span><span class="n">your_pallet</span><span class="p">}</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">},</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">);</span>
 </code></pre></div>
@@ -942,7 +946,7 @@
 <p>As the final step of runtime configuration, we define the IVC compatible function and extend the <code>TestRuntime</code> config with it. You can replace <code>ExampleFunction</code> with your own function.
 Function should be implemented for a native computation and for on circuit computation as well.</p>
 <ul>
-<li>runtime/src/main.rs</li>
+<li>runtime/src/lib.rs</li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="cp">#[derive(Debug, Clone, Default, PartialEq, Eq, Encode, Decode)]</span>
 <span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">ExampleFunction</span><span class="o">&lt;</span><span class="n">Field</span>: <span class="nc">PrimeField</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
@@ -967,9 +971,7 @@ Function should be implemented for a native computation and for on circuit compu
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 
-<span class="c1">// Should be defined on the cycle of curves.</span>
-<span class="c1">// Function circuit is defined over the scalar of the corresponding curve.</span>
-<span class="k">impl</span><span class="w"> </span><span class="n">nova_ivc</span>::<span class="n">Config</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">TestRuntime</span><span class="w"> </span><span class="p">{</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="n">Config</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">TestRuntime</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">type</span> <span class="nc">E1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bn254Driver</span><span class="p">;</span>
 <span class="w">    </span><span class="k">type</span> <span class="nc">E2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GrumpkinDriver</span><span class="p">;</span>
 <span class="w">    </span><span class="k">type</span> <span class="nc">FC1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ExampleFunction</span><span class="o">&lt;</span><span class="n">Fr</span><span class="o">&gt;</span><span class="p">;</span>
@@ -981,17 +983,19 @@ Function should be implemented for a native computation and for on circuit compu
 <h2 id="5-test-whether-the-functions-work-correctly">5. Test whether the functions work correctly</h2>
 <p>The pallet-nova methods is available on your pallet so we are going to test them as following tests.</p>
 <ul>
-<li><your-pallet>/src/main.rs</li>
+<li><your-pallet>/src/lib.rs</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="codehilite"><pre><span></span><code><span class="sd">/// The set `Thing1` storage with valid proof</span>
+<span class="cp">#[test]</span>
+<span class="k">fn</span> <span class="nf">sums_thing_one_with_valid_proof</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_rng</span><span class="p">();</span>
 
 <span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">pp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PublicParams</span>::<span class="o">&lt;</span>
-<span class="w">        </span><span class="n">Bn254Driver</span><span class="p">,</span>
-<span class="w">        </span><span class="n">GrumpkinDriver</span><span class="p">,</span>
-<span class="w">        </span><span class="n">ExampleFunction</span><span class="o">&lt;</span><span class="n">Fr</span><span class="o">&gt;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">ExampleFunction</span><span class="o">&lt;</span><span class="n">Fq</span><span class="o">&gt;</span><span class="p">,</span>
-<span class="w">    </span><span class="o">&gt;</span>::<span class="n">setup</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Bn254Driver</span><span class="p">,</span>
+<span class="w">            </span><span class="n">GrumpkinDriver</span><span class="p">,</span>
+<span class="w">            </span><span class="n">ExampleFunction</span><span class="o">&lt;</span><span class="n">Fr</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">ExampleFunction</span><span class="o">&lt;</span><span class="n">Fq</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">        </span><span class="o">&gt;</span>::<span class="n">setup</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="p">);</span>
 
 <span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">z0_primary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DenseVectors</span>::<span class="n">new</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="n">Fr</span>::<span class="n">from</span><span class="p">(</span><span class="mi">0</span><span class="p">)]);</span>
 <span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">z0_secondary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DenseVectors</span>::<span class="n">new</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="n">Fq</span>::<span class="n">from</span><span class="p">(</span><span class="mi">0</span><span class="p">)]);</span>
@@ -1001,12 +1005,16 @@ Function should be implemented for a native computation and for on circuit compu
 <span class="w">            </span><span class="n">z0_primary</span><span class="p">,</span>
 <span class="w">            </span><span class="n">z0_secondary</span><span class="p">,</span>
 <span class="w">        </span><span class="p">);</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">2</span><span class="p">).</span><span class="n">for_each</span><span class="p">(</span><span class="o">|</span><span class="n">_</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="n">ivc</span><span class="p">.</span><span class="n">prove_step</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pp</span><span class="p">);});</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">2</span><span class="p">).</span><span class="n">for_each</span><span class="p">(</span><span class="o">|</span><span class="n">_</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ivc</span><span class="p">.</span><span class="n">prove_step</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pp</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
 <span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">proof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ivc</span><span class="p">.</span><span class="n">prove_step</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pp</span><span class="p">);</span>
 
 <span class="w">    </span><span class="n">new_test_ext</span><span class="p">().</span><span class="n">execute_with</span><span class="p">(</span><span class="o">||</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="fm">assert!</span><span class="p">(</span><span class="n">Nova</span>::<span class="n">verify</span><span class="p">(</span><span class="n">Origin</span>::<span class="n">signed</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">proof</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">.</span><span class="n">clone</span><span class="p">()).</span><span class="n">is_ok</span><span class="p">());</span>
+<span class="w">        </span><span class="n">assert_ok</span><span class="o">!</span><span class="p">(</span><span class="n">SumStorage</span>::<span class="n">set_thing_1</span><span class="p">(</span><span class="n">Origin</span>::<span class="n">signed</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="n">proof</span><span class="p">,</span><span class="w"> </span><span class="n">pp</span><span class="p">));</span>
 <span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">SumStorage</span>::<span class="n">get_sum</span><span class="p">(),</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 
