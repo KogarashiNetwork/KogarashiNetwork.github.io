@@ -1,6 +1,6 @@
 # Nova Tutorial
 
-In this tutorial, we are going to use [`pallet-nova`](https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova) functionality by coupling with your pallet. We use [sum-storage](https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage) pallet as example and call [pallet-nova](https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova) zero knowledge `verify` method before set storage value. If the `verify` is successful, the value can set as storage value.
+In this tutorial, we are going to use [`pallet-nova`](https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova) functionality by coupling with your pallet. We use [sum-storage](https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage) pallet as example and call [pallet-nova](https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova) zero knowledge `verify` method before set storage value. If the `verify` is successful, the value can set as storage value. You can find full example [here](https://github.com/KogarashiNetwork/Kogarashi/tree/master/sample).
 
 The steps are following.
 
