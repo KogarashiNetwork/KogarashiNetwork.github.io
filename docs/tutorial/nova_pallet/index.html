@@ -844,7 +844,7 @@
 
 
 <h1 id="nova-tutorial">Nova Tutorial</h1>
-<p>In this tutorial, we are going to import pallet-nova to substrate runtime and test its functionalities.</p>
+<p>In this tutorial, we are going to use <a href="https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova"><code>pallet-nova</code></a> functionality by coupling with your pallet. We use <a href="https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage">sum-storage</a> pallet as example and call <a href="https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova">pallet-nova</a> zero knowledge <code>verify</code> method before set storage value. If the <code>verify</code> is successful, the value can set as storage value.</p>
 <p>The steps are following.</p>
 <ol>
 <li>Define the pallet-nova in depencencies</li>
@@ -863,7 +863,7 @@
 <span class="n">rand_core</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="o">=</span><span class="s">&quot;0.6&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">default-features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 
-<p>The <code>plonk-pallet</code> depends on <code>rand_core</code> so please import it.</p>
+<p>The <code>plonk-nova</code> depends on <code>rand_core</code> so please import it.</p>
 <h2 id="2-couple-the-pallet-nova-to-your-own-pallet">2. Couple the pallet-nova to your own pallet</h2>
 <p>The next, the <code>pallet-nova</code> need to be coupled with your pallet. Please couple the pallet <code>Config</code> as following.</p>
 <ul>
@@ -882,7 +882,7 @@
 
 <p>With this step, you can use the <code>pallet-nova</code> in your pallet through <code>Module</code>.</p>
 <h2 id="3-use-the-pallet-nova-methods-on-your-pallet">3. Use the pallet-nova methods on your pallet</h2>
-<p>Next, let's use the <code>pallet-nova</code> method in your pallet. We are going to use the <code>verify</code> method which verifies the proof. In this tutorial, we use <a href="https://github.com/JoshOrndorff/recipes/blob/master/pallets/sum-storage/src/main.rs">sum-storage</a> pallet as example and call the <code>verify</code> method before set <code>Thing1</code> storage value on <code>set_thing_1</code>. If the <code>verify</code> is successful, the <code>set_thing_1</code> can set <code>Thing1</code> value.</p>
+<p>Next, let's use the <code>pallet-nova</code> method in your pallet. We are going to use the <code>verify</code> method which verifies the proof. We use <a href="https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage">sum-storage</a> pallet as example and call the <code>verify</code> method before set <code>Thing1</code> storage value on <code>set_thing_1</code>. If the <code>verify</code> is successful, the <code>set_thing_1</code> can set <code>Thing1</code> value.</p>
 <ul>
 <li><your-pallet>/src/main.rs</li>
 </ul>
@@ -910,9 +910,10 @@
 <p>With this step, we can check whether the proof is valid before setting the <code>Thing1</code> value and only if the proof is valid, the value is set.</p>
 <h2 id="4-import-the-coupling-pallet-to-testruntime-and-define-the-function-for-ivc-verification">4. Import the coupling pallet to TestRuntime and define the function for IVC verification.</h2>
 <p>We already can use the <code>pallet-nova</code> methods so we are going to import it to <code>TestRumtime</code> and define your customized IVC compatible function.</p>
+<p>The notation is aligned with <a href="https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/">Substrate tutorial</a>.</p>
 <p>In order to use <code>pallet-nova</code> in <code>TestRuntime</code>, we need to import <code>pallet-nova</code> crate and define the pallet config to <code>construct_runtime</code> as following.</p>
 <ul>
-<li>runtime/src/main.rs</li>
+<li>runtime/src/lib.rs</li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="k">crate</span>::<span class="p">{</span><span class="bp">self</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">sum_storage</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">};</span>
 
@@ -942,7 +943,7 @@
 <p>As the final step of runtime configuration, we define the IVC compatible function and extend the <code>TestRuntime</code> config with it. You can replace <code>ExampleFunction</code> with your own function.
 Function should be implemented for a native computation and for on circuit computation as well.</p>
 <ul>
-<li>runtime/src/main.rs</li>
+<li>runtime/src/lib.rs</li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="cp">#[derive(Debug, Clone, Default, PartialEq, Eq, Encode, Decode)]</span>
 <span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">ExampleFunction</span><span class="o">&lt;</span><span class="n">Field</span>: <span class="nc">PrimeField</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>

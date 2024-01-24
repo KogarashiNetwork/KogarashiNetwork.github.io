@@ -1,6 +1,6 @@
 # Nova Tutorial
 
-In this tutorial, we are going to import pallet-nova to substrate runtime and test its functionalities.
+In this tutorial, we are going to use [`pallet-nova`](https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova) functionality by coupling with your pallet. We use [sum-storage](https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage) pallet as example and call [pallet-nova](https://github.com/KogarashiNetwork/Kogarashi/tree/master/pallet/nova) zero knowledge `verify` method before set storage value. If the `verify` is successful, the value can set as storage value.
 
 The steps are following.
 
@@ -9,7 +9,6 @@ The steps are following.
 3. Use the pallet-nova methods in your pallet
 4. Import the coupling pallet to TestRuntime
 5. Test whether the functions work correctly
-
 
 ## 1. Define the pallet-nova in depencencies
 First of all, you need to define the `pallet-nova` when you start to implement your pallet. Please define as following.
@@ -21,7 +20,7 @@ pallet-nova = { git = "https://github.com/KogarashiNetwork/Kogarashi", branch = 
 rand_core = {version="0.6", default-features = false }
 ```
 
-The `plonk-pallet` depends on `rand_core` so please import it.
+The `plonk-nova` depends on `rand_core` so please import it.
 
 ## 2. Couple the pallet-nova to your own pallet
 
@@ -42,7 +41,7 @@ pub mod pallet {
 With this step, you can use the `pallet-nova` in your pallet through `Module`.
 
 ## 3. Use the pallet-nova methods on your pallet
-Next, let's use the `pallet-nova` method in your pallet. We are going to use the `verify` method which verifies the proof. In this tutorial, we use [sum-storage](https://github.com/JoshOrndorff/recipes/blob/master/pallets/sum-storage/src/main.rs) pallet as example and call the `verify` method before set `Thing1` storage value on `set_thing_1`. If the `verify` is successful, the `set_thing_1` can set `Thing1` value.
+Next, let's use the `pallet-nova` method in your pallet. We are going to use the `verify` method which verifies the proof. We use [sum-storage](https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage) pallet as example and call the `verify` method before set `Thing1` storage value on `set_thing_1`. If the `verify` is successful, the `set_thing_1` can set `Thing1` value.
 
 - <your-pallet>/src/main.rs
 ```rust
@@ -71,9 +70,11 @@ With this step, we can check whether the proof is valid before setting the `Thin
 ## 4. Import the coupling pallet to TestRuntime and define the function for IVC verification.
 We already can use the `pallet-nova` methods so we are going to import it to `TestRumtime` and define your customized IVC compatible function.
 
+The notation is aligned with [Substrate tutorial](https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/).
+
 In order to use `pallet-nova` in `TestRuntime`, we need to import `pallet-nova` crate and define the pallet config to `construct_runtime` as following.
 
-- runtime/src/main.rs
+- runtime/src/lib.rs
 ```rust
 use crate::{self as sum_storage, Config};
 
@@ -103,7 +104,7 @@ construct_runtime!(
 As the final step of runtime configuration, we define the IVC compatible function and extend the `TestRuntime` config with it. You can replace `ExampleFunction` with your own function.
 Function should be implemented for a native computation and for on circuit computation as well.
 
-- runtime/src/main.rs
+- runtime/src/lib.rs
 ```rust
 #[derive(Debug, Clone, Default, PartialEq, Eq, Encode, Decode)]
 pub struct ExampleFunction<Field: PrimeField> {
