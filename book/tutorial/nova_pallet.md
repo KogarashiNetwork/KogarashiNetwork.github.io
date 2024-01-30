@@ -7,13 +7,14 @@ The steps are following.
 1. Define the pallet-nova in depencencies
 2. Couple the pallet-nova to your own pallet
 3. Use the pallet-nova methods in your pallet
-4. Import the coupling pallet to TestRuntime
-5. Test whether the functions work correctly
+4. Define the function for IVC verification
+5. Import the coupling pallet to TestRuntime
+6. Test whether the function work correctly
 
 ## 1. Define the pallet-nova in depencencies
 First of all, you need to define the `pallet-nova` when you start to implement your pallet. Please define as following.
 
-- <your-pallet>/Cargo.toml
+- [<your-pallet>/Cargo.toml](https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/Cargo.toml#L19)
 ```toml
 [dependencies]
 pallet-nova = { git = "https://github.com/KogarashiNetwork/Kogarashi", branch = "master", default-features = false }
@@ -26,7 +27,7 @@ The `plonk-nova` depends on `rand_core` so please import it.
 
 The next, the `pallet-nova` need to be coupled with your pallet. Please couple the pallet `Config` as following.
 
-- <your-pallet>/src/lib.rs
+- [<your-pallet>/src/lib.rs](https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/lib.rs#L22)
 ```rs
 #[frame_support::pallet]
 pub mod pallet {
@@ -46,7 +47,7 @@ With this step, you can use the `pallet-nova` in your pallet through `Module`.
 ## 3. Use the pallet-nova methods on your pallet
 Next, let's use the `pallet-nova` method in your pallet. We are going to use the `verify` method which verifies the proof. We use [sum-storage](https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage) pallet as example and call the `verify` method before set `Thing1` storage value on `set_thing_1`. If the `verify` is successful, the `set_thing_1` can set `Thing1` value.
 
-- <your-pallet>/src/lib.rs
+- [<your-pallet>/src/lib.rs](https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/lib.rs#L51)
 ```rust
     // The module's dispatchable functions.
     #[pallet::call]
@@ -70,44 +71,11 @@ Next, let's use the `pallet-nova` method in your pallet. We are going to use the
 ```
 With this step, we can check whether the proof is valid before setting the `Thing1` value and only if the proof is valid, the value is set.
 
-## 4. Import the coupling pallet to TestRuntime and define the function for IVC verification.
-We already can use the `pallet-nova` methods so we are going to import it to `TestRumtime` and define your customized IVC compatible function.
+## 4. Define the function for IVC verification
+We define the function that we would like to prove the validity and extend the Nova pallet config with it. You can replace `ExampleFunction` with your own function.
+`invoke` method should be implemented for a native computation and `invoke_cs` method should be for r1cs constraints.
 
-The notation is aligned with [Substrate tutorial](https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/).
-
-In order to use `pallet-nova` in `TestRuntime`, we need to import `pallet-nova` crate and define the pallet config to `construct_runtime` as following.
-
-- runtime/src/lib.rs
-```rust
-use crate::{self as sum_storage, Config};
-
-use frame_support::dispatch::{DispatchError, DispatchErrorWithPostInfo, PostDispatchInfo};
-use frame_support::{assert_ok, construct_runtime, parameter_types};
-
-// Import `pallet_nova` and dependencies
-pub use pallet_nova::*;
-use rand_core::SeedableRng;
-
---- snip ---
-
-construct_runtime!(
-    pub enum TestRuntime where
-        Block = Block,
-        NodeBlock = Block,
-        UncheckedExtrinsic = UncheckedExtrinsic,
-    {
-        System: frame_system::{Module, Call, Config, Storage, Event<T>},
-        // Define the `pallet-nova` in `contruct_runtime`
-        Nova: pallet_nova::{Module, Call, Storage},
-        {YourPallet}: {your_pallet}::{Module, Call, Storage, Event<T>},
-    }
-);
-```
-
-As the final step of runtime configuration, we define the IVC compatible function and extend the `TestRuntime` config with it. You can replace `ExampleFunction` with your own function.
-Function should be implemented for a native computation and for on circuit computation as well.
-
-- runtime/src/lib.rs
+- [<your-pallet>/src/client.rs](https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/client.rs#L4)
 ```rust
 #[derive(Debug, Clone, Default, PartialEq, Eq, Encode, Decode)]
 pub struct ExampleFunction<Field: PrimeField> {
@@ -131,6 +99,40 @@ impl<F: PrimeField> FunctionCircuit<F> for ExampleFunction<F> {
         vec![&(&z_i_cube + &z_i[0]) + &five]
     }
 }
+```
+With this step, we finish to setup the ivc prover and verifier.
+
+## 5. Import the coupling pallet to TestRuntime
+We already define customized IVC compatible function and can use the `pallet-nova` methods so we are going to import it to `TestRumtime`.
+
+In order to use `pallet-nova` in `TestRuntime`, we need to import `pallet-nova` crate and define the pallet config to `construct_runtime` as following.
+
+- [<your-pallet>/src/tests.rs](https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/tests.rs)
+```rust
+use crate::{self as sum_storage, client::ExampleFunction, Config};
+
+use frame_support::{assert_ok, construct_runtime, parameter_types};
+
+// Import `pallet_nova` and dependencies
+pub use pallet_nova::*;
+use rand_core::SeedableRng;
+
+--- snip ---
+
+construct_runtime!(
+    pub enum TestRuntime where
+        Block = Block,
+        NodeBlock = Block,
+        UncheckedExtrinsic = UncheckedExtrinsic,
+    {
+        System: frame_system::{Module, Call, Config, Storage, Event<T>},
+        // Define the `pallet-nova` in `contruct_runtime`
+        Nova: pallet_nova::{Module, Call, Storage},
+        {YourPallet}: {your_pallet}::{Module, Call, Storage, Event<T>},
+    }
+);
+
+--- snip ---
 
 impl pallet_nova::Config for TestRuntime {
     type E1 = Bn254Driver;
@@ -139,12 +141,11 @@ impl pallet_nova::Config for TestRuntime {
     type FC2 = ExampleFunction<Fq>;
 }
 ```
-With this step, we finish to setup the ivc runtime environment.
 
-## 5. Test whether the functions work correctly
+## 6. Test whether the function work correctly
 The pallet-nova methods is available on your pallet so we are going to test them as following tests.
 
-- <your-pallet>/src/lib.rs
+- [<your-pallet>/src/tests.rs](https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/tests.rs#L94)
 ```rust
 /// The set `Thing1` storage with valid proof
 #[test]
@@ -178,4 +179,8 @@ fn sums_thing_one_with_valid_proof() {
     assert_eq!(SumStorage::get_sum(), 42);
 }
 ```
-With above tests, we can confirm that your pallet is coupling with `pallet-nova` and these methods work correctly. You can check the `pallet-nova` example [here](https://github.com/KogarashiNetwork/Kogarashi/blob/master/pallet/nova/src/tests.rs). Happy hacking!
+With above tests, we can confirm that your pallet is coupling with `pallet-nova` and these methods work correctly.
+
+The notation is aligned with [Substrate tutorial](https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/).
+
+You can check the `pallet-nova` example [here](https://github.com/KogarashiNetwork/Kogarashi/blob/master/pallet/nova/src/tests.rs). Happy hacking!

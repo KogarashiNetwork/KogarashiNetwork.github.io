@@ -418,15 +418,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-import-the-coupling-pallet-to-testruntime-and-define-the-function-for-ivc-verification" class="md-nav__link">
-    4. Import the coupling pallet to TestRuntime and define the function for IVC verification.
+  <a href="#4-define-the-function-for-ivc-verification" class="md-nav__link">
+    4. Define the function for IVC verification
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-test-whether-the-functions-work-correctly" class="md-nav__link">
-    5. Test whether the functions work correctly
+  <a href="#5-import-the-coupling-pallet-to-testruntime" class="md-nav__link">
+    5. Import the coupling pallet to TestRuntime
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-test-whether-the-function-work-correctly" class="md-nav__link">
+    6. Test whether the function work correctly
   </a>
   
 </li>
@@ -815,15 +822,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-import-the-coupling-pallet-to-testruntime-and-define-the-function-for-ivc-verification" class="md-nav__link">
-    4. Import the coupling pallet to TestRuntime and define the function for IVC verification.
+  <a href="#4-define-the-function-for-ivc-verification" class="md-nav__link">
+    4. Define the function for IVC verification
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-test-whether-the-functions-work-correctly" class="md-nav__link">
-    5. Test whether the functions work correctly
+  <a href="#5-import-the-coupling-pallet-to-testruntime" class="md-nav__link">
+    5. Import the coupling pallet to TestRuntime
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-test-whether-the-function-work-correctly" class="md-nav__link">
+    6. Test whether the function work correctly
   </a>
   
 </li>
@@ -850,13 +864,14 @@
 <li>Define the pallet-nova in depencencies</li>
 <li>Couple the pallet-nova to your own pallet</li>
 <li>Use the pallet-nova methods in your pallet</li>
+<li>Define the function for IVC verification</li>
 <li>Import the coupling pallet to TestRuntime</li>
-<li>Test whether the functions work correctly</li>
+<li>Test whether the function work correctly</li>
 </ol>
 <h2 id="1-define-the-pallet-nova-in-depencencies">1. Define the pallet-nova in depencencies</h2>
 <p>First of all, you need to define the <code>pallet-nova</code> when you start to implement your pallet. Please define as following.</p>
 <ul>
-<li><your-pallet>/Cargo.toml</li>
+<li><a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/Cargo.toml#L19"><your-pallet>/Cargo.toml</a></li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span>
 <span class="n">pallet-nova</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://github.com/KogarashiNetwork/Kogarashi&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;master&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">default-features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="p">}</span>
@@ -867,7 +882,7 @@
 <h2 id="2-couple-the-pallet-nova-to-your-own-pallet">2. Couple the pallet-nova to your own pallet</h2>
 <p>The next, the <code>pallet-nova</code> need to be coupled with your pallet. Please couple the pallet <code>Config</code> as following.</p>
 <ul>
-<li><your-pallet>/src/lib.rs</li>
+<li><a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/lib.rs#L22"><your-pallet>/src/lib.rs</a></li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="cp">#[frame_support::pallet]</span>
 <span class="k">pub</span><span class="w"> </span><span class="k">mod</span> <span class="nn">pallet</span><span class="w"> </span><span class="p">{</span>
@@ -887,7 +902,7 @@
 <h2 id="3-use-the-pallet-nova-methods-on-your-pallet">3. Use the pallet-nova methods on your pallet</h2>
 <p>Next, let's use the <code>pallet-nova</code> method in your pallet. We are going to use the <code>verify</code> method which verifies the proof. We use <a href="https://github.com/JoshOrndorff/recipes/tree/master/pallets/sum-storage">sum-storage</a> pallet as example and call the <code>verify</code> method before set <code>Thing1</code> storage value on <code>set_thing_1</code>. If the <code>verify</code> is successful, the <code>set_thing_1</code> can set <code>Thing1</code> value.</p>
 <ul>
-<li><your-pallet>/src/lib.rs</li>
+<li><a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/lib.rs#L51"><your-pallet>/src/lib.rs</a></li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="c1">// The module&#39;s dispatchable functions.</span>
 <span class="w">    </span><span class="cp">#[pallet::call]</span>
@@ -911,42 +926,11 @@
 </code></pre></div>
 
 <p>With this step, we can check whether the proof is valid before setting the <code>Thing1</code> value and only if the proof is valid, the value is set.</p>
-<h2 id="4-import-the-coupling-pallet-to-testruntime-and-define-the-function-for-ivc-verification">4. Import the coupling pallet to TestRuntime and define the function for IVC verification.</h2>
-<p>We already can use the <code>pallet-nova</code> methods so we are going to import it to <code>TestRumtime</code> and define your customized IVC compatible function.</p>
-<p>The notation is aligned with <a href="https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/">Substrate tutorial</a>.</p>
-<p>In order to use <code>pallet-nova</code> in <code>TestRuntime</code>, we need to import <code>pallet-nova</code> crate and define the pallet config to <code>construct_runtime</code> as following.</p>
+<h2 id="4-define-the-function-for-ivc-verification">4. Define the function for IVC verification</h2>
+<p>We define the function that we would like to prove the validity and extend the Nova pallet config with it. You can replace <code>ExampleFunction</code> with your own function.
+<code>invoke</code> method should be implemented for a native computation and <code>invoke_cs</code> method should be for r1cs constraints.</p>
 <ul>
-<li>runtime/src/lib.rs</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="k">crate</span>::<span class="p">{</span><span class="bp">self</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">sum_storage</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">};</span>
-
-<span class="k">use</span><span class="w"> </span><span class="n">frame_support</span>::<span class="n">dispatch</span>::<span class="p">{</span><span class="n">DispatchError</span><span class="p">,</span><span class="w"> </span><span class="n">DispatchErrorWithPostInfo</span><span class="p">,</span><span class="w"> </span><span class="n">PostDispatchInfo</span><span class="p">};</span>
-<span class="k">use</span><span class="w"> </span><span class="n">frame_support</span>::<span class="p">{</span><span class="n">assert_ok</span><span class="p">,</span><span class="w"> </span><span class="n">construct_runtime</span><span class="p">,</span><span class="w"> </span><span class="n">parameter_types</span><span class="p">};</span>
-
-<span class="c1">// Import `pallet_nova` and dependencies</span>
-<span class="k">pub</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="o">*</span><span class="p">;</span>
-<span class="k">use</span><span class="w"> </span><span class="n">rand_core</span>::<span class="n">SeedableRng</span><span class="p">;</span>
-
-<span class="o">---</span><span class="w"> </span><span class="n">snip</span><span class="w"> </span><span class="o">---</span>
-
-<span class="n">construct_runtime</span><span class="o">!</span><span class="p">(</span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">enum</span> <span class="nc">TestRuntime</span><span class="w"> </span><span class="k">where</span>
-<span class="w">        </span><span class="n">Block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Block</span><span class="p">,</span>
-<span class="w">        </span><span class="n">NodeBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Block</span><span class="p">,</span>
-<span class="w">        </span><span class="n">UncheckedExtrinsic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UncheckedExtrinsic</span><span class="p">,</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">System</span>: <span class="nc">frame_system</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">},</span>
-<span class="w">        </span><span class="c1">// Define the `pallet-nova` in `contruct_runtime`</span>
-<span class="w">        </span><span class="n">Nova</span>: <span class="nc">pallet_nova</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">},</span>
-<span class="w">        </span><span class="p">{</span><span class="n">YourPallet</span><span class="p">}</span>: <span class="p">{</span><span class="n">your_pallet</span><span class="p">}</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">);</span>
-</code></pre></div>
-
-<p>As the final step of runtime configuration, we define the IVC compatible function and extend the <code>TestRuntime</code> config with it. You can replace <code>ExampleFunction</code> with your own function.
-Function should be implemented for a native computation and for on circuit computation as well.</p>
-<ul>
-<li>runtime/src/lib.rs</li>
+<li><a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/client.rs#L4"><your-pallet>/src/client.rs</a></li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="cp">#[derive(Debug, Clone, Default, PartialEq, Eq, Encode, Decode)]</span>
 <span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">ExampleFunction</span><span class="o">&lt;</span><span class="n">Field</span>: <span class="nc">PrimeField</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
@@ -970,6 +954,39 @@ Function should be implemented for a native computation and for on circuit compu
 <span class="w">        </span><span class="fm">vec!</span><span class="p">[</span><span class="o">&amp;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">z_i_cube</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">&amp;</span><span class="n">z_i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">&amp;</span><span class="n">five</span><span class="p">]</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
+</code></pre></div>
+
+<p>With this step, we finish to setup the ivc prover and verifier.</p>
+<h2 id="5-import-the-coupling-pallet-to-testruntime">5. Import the coupling pallet to TestRuntime</h2>
+<p>We already define customized IVC compatible function and can use the <code>pallet-nova</code> methods so we are going to import it to <code>TestRumtime</code>.</p>
+<p>In order to use <code>pallet-nova</code> in <code>TestRuntime</code>, we need to import <code>pallet-nova</code> crate and define the pallet config to <code>construct_runtime</code> as following.</p>
+<ul>
+<li><a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/tests.rs"><your-pallet>/src/tests.rs</a></li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="k">crate</span>::<span class="p">{</span><span class="bp">self</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">sum_storage</span><span class="p">,</span><span class="w"> </span><span class="n">client</span>::<span class="n">ExampleFunction</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">};</span>
+
+<span class="k">use</span><span class="w"> </span><span class="n">frame_support</span>::<span class="p">{</span><span class="n">assert_ok</span><span class="p">,</span><span class="w"> </span><span class="n">construct_runtime</span><span class="p">,</span><span class="w"> </span><span class="n">parameter_types</span><span class="p">};</span>
+
+<span class="c1">// Import `pallet_nova` and dependencies</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="o">*</span><span class="p">;</span>
+<span class="k">use</span><span class="w"> </span><span class="n">rand_core</span>::<span class="n">SeedableRng</span><span class="p">;</span>
+
+<span class="o">---</span><span class="w"> </span><span class="n">snip</span><span class="w"> </span><span class="o">---</span>
+
+<span class="n">construct_runtime</span><span class="o">!</span><span class="p">(</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">enum</span> <span class="nc">TestRuntime</span><span class="w"> </span><span class="k">where</span>
+<span class="w">        </span><span class="n">Block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Block</span><span class="p">,</span>
+<span class="w">        </span><span class="n">NodeBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Block</span><span class="p">,</span>
+<span class="w">        </span><span class="n">UncheckedExtrinsic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UncheckedExtrinsic</span><span class="p">,</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span>: <span class="nc">frame_system</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">},</span>
+<span class="w">        </span><span class="c1">// Define the `pallet-nova` in `contruct_runtime`</span>
+<span class="w">        </span><span class="n">Nova</span>: <span class="nc">pallet_nova</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="n">YourPallet</span><span class="p">}</span>: <span class="p">{</span><span class="n">your_pallet</span><span class="p">}</span>::<span class="p">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="p">,</span><span class="w"> </span><span class="n">Storage</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">);</span>
+
+<span class="o">---</span><span class="w"> </span><span class="n">snip</span><span class="w"> </span><span class="o">---</span>
 
 <span class="k">impl</span><span class="w"> </span><span class="n">pallet_nova</span>::<span class="n">Config</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">TestRuntime</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">type</span> <span class="nc">E1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bn254Driver</span><span class="p">;</span>
@@ -979,11 +996,10 @@ Function should be implemented for a native computation and for on circuit compu
 <span class="p">}</span>
 </code></pre></div>
 
-<p>With this step, we finish to setup the ivc runtime environment.</p>
-<h2 id="5-test-whether-the-functions-work-correctly">5. Test whether the functions work correctly</h2>
+<h2 id="6-test-whether-the-function-work-correctly">6. Test whether the function work correctly</h2>
 <p>The pallet-nova methods is available on your pallet so we are going to test them as following tests.</p>
 <ul>
-<li><your-pallet>/src/lib.rs</li>
+<li><a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/sample/src/tests.rs#L94"><your-pallet>/src/tests.rs</a></li>
 </ul>
 <div class="codehilite"><pre><span></span><code><span class="sd">/// The set `Thing1` storage with valid proof</span>
 <span class="cp">#[test]</span>
@@ -1018,7 +1034,9 @@ Function should be implemented for a native computation and for on circuit compu
 <span class="p">}</span>
 </code></pre></div>
 
-<p>With above tests, we can confirm that your pallet is coupling with <code>pallet-nova</code> and these methods work correctly. You can check the <code>pallet-nova</code> example <a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/pallet/nova/src/tests.rs">here</a>. Happy hacking!</p>
+<p>With above tests, we can confirm that your pallet is coupling with <code>pallet-nova</code> and these methods work correctly.</p>
+<p>The notation is aligned with <a href="https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/">Substrate tutorial</a>.</p>
+<p>You can check the <code>pallet-nova</code> example <a href="https://github.com/KogarashiNetwork/Kogarashi/blob/master/pallet/nova/src/tests.rs">here</a>. Happy hacking!</p>
 
 
 
