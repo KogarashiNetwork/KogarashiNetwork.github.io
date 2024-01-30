@@ -181,6 +181,4 @@ fn sums_thing_one_with_valid_proof() {
 ```
 With above tests, we can confirm that your pallet is coupling with `pallet-nova` and these methods work correctly.
 
-The notation is aligned with [Substrate tutorial](https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/).
-
-You can check the `pallet-nova` example [here](https://github.com/KogarashiNetwork/Kogarashi/blob/master/pallet/nova/src/tests.rs). Happy hacking!
+You can check [how to import a pallet to runtime](https://docs.substrate.io/reference/how-to-guides/basics/import-a-pallet/) and the `pallet-nova` sample [implementation](https://github.com/KogarashiNetwork/Kogarashi/tree/master/sample). Happy hacking!
